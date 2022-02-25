@@ -1,14 +1,12 @@
 <template>
     <h1>Dashboard</h1>
     <MainSynth />
-    <!-- <CustomSynth /> -->
 </template>
 
 <script lang="ts">
 import * as Tone from "tone";
 import { defineComponent } from "vue";
-// import CustomSynth from "./CustomSynth.vue";
-import MainSynth from "./MainSynth.vue";
+import MainSynth from "./MainPiano.vue";
 
 export default defineComponent({
     name: "ToneDashboard",
@@ -21,7 +19,7 @@ export default defineComponent({
         synth.triggerAttackRelease("C4", "32n", now + 0, 0.9);
         synth.triggerAttackRelease("G4", "32n", now + 0.3, 0.9);
     },
-    components: { /* CustomSynth, */ MainSynth },
+    components: { MainSynth },
 });
 </script>
 

@@ -48,20 +48,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.d-flex {
-    display: flex;
-}
-
-.flex-row {
-    flex-direction: row;
-}
-
-.flex-col {
-    flex-direction: column;
-}
-
-.justify-center {
-    justify-content: center;
-}
-</style>
+<style lang="scss"></style>

@@ -1,8 +1,7 @@
 import store from "@/store";
-import { Note } from "./tone/generator";
 
 export function generateChord(): string[] {
-    const notes = store.state.notesInKey;
+    const notes = store.state.notesInKeyMode;
 
     // Between 3 and 6
     let octave = Math.floor(Math.random() * 3) + 3;
@@ -38,8 +37,8 @@ export function generateChord(): string[] {
     return chord;
 }
 
-export function getNextNote(): Note {
-    const notes = store.state.notesInKey;
+export function getNextNote(): string {
+    const notes = store.state.notesInKeyMode;
     const octave = Math.floor(Math.random() * 3) + 3;
 
     const rndIndex = Math.floor(Math.random() * notes.length);
