@@ -1,13 +1,13 @@
 <template>
-    <ToneMain />
+    <ToneDashboard />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import ToneMain from "@/components/Tone/ToneMain.vue";
+import ToneDashboard from "@/components/Tone/ToneDashboard.vue";
 
 export default defineComponent({
     name: "Home",
-    components: { ToneMain },
+    components: { ToneDashboard },
 });
 </script>
