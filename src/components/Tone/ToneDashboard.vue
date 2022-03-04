@@ -1,25 +1,29 @@
 <template>
-    <h1>Dashboard</h1>
-    <MainSynth />
+    <template v-if="$store.state.toneReady">
+        <MainPiano />
+    </template>
+
+    <template v-else>
+        <button class="btn salmon btn-init-tone" @click="initTone">
+            Start
+        </button>
+    </template>
 </template>
 
 <script lang="ts">
-import * as Tone from "tone";
 import { defineComponent } from "vue";
-import MainSynth from "./MainPiano.vue";
+import * as Tone from "tone";
+import store from "@/store";
+import MainPiano from "./MainPiano.vue";
 
 export default defineComponent({
     name: "ToneDashboard",
-    mounted() {
-        const synth = new Tone.Synth({
-            envelope: { attack: 0.01, release: 1 },
-            oscillator: { type: "fatsine1", phase: 90 },
-        }).toDestination();
-        const now = Tone.now();
-        synth.triggerAttackRelease("C4", "32n", now + 0, 0.9);
-        synth.triggerAttackRelease("G4", "32n", now + 0.3, 0.9);
+    methods: {
+        initTone() {
+            Tone.start().then(() => store.commit("SET_TONE_READY"));
+        },
     },
-    components: { MainSynth },
+    components: { MainPiano },
 });
 </script>
 

@@ -1,14 +1,15 @@
 import { Store } from "vuex";
+import { Mode, Note, OctavedNote } from "./types/music";
 
 declare module "@vue/runtime-core" {
-    // declare your own store states
     interface State {
         toneReady: boolean;
         samplesReady: boolean;
-        key: string;
-        mode: string;
-        notesInKeyMode: string[];
-        lastPlayedNote: string;
+        key: Note;
+        mode: Mode;
+        notesInKeyMode: Note[];
+        lastPlayedNote: OctavedNote;
+        lastPlayedChord: OctavedNote[];
     }
 
     // provide typings for `this.$store`

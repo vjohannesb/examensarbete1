@@ -46,4 +46,34 @@
 .justify-center {
     justify-content: center;
 }
+
+.btn {
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    border: none;
+    background: none;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: 300ms;
+
+    &:hover {
+        background: salmon;
+        color: white;
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+    &.salmon {
+        border: 2px solid salmon;
+        color: salmon;
+
+        &:hover {
+            color: white;
+        }
+    }
+}
 </style>

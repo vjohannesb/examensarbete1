@@ -11,6 +11,7 @@ export type Note =
     | "A"
     | "A#"
     | "B";
+
 export type Mode =
     | "ionian"
     | "dorian"
@@ -19,9 +20,16 @@ export type Mode =
     | "mixolydian"
     | "aeolian"
     | "locrian";
+
 export type ModeTable = {
     [mode in keyof Mode as Mode]: number[];
 };
 
 export type NoteLength = "32n" | "16n" | "8n" | "4n" | "2n" | "1n";
-export type NoteLengthTable = NoteLength[];
+
+export type Weighted<T> = {
+    value: T;
+    weight: number;
+};
+
+export type OctavedNote = `${Note}${number}`;

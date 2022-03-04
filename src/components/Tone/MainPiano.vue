@@ -1,26 +1,26 @@
 <template>
-    <h1>Main synth</h1>
     <template v-if="$store.state.samplesReady">
         <PlayButton @click="togglePlaying" />
     </template>
     <span v-else>Loading samples...</span>
     <p>{{ $store.state.lastPlayedNote }}</p>
+    <p>{{ $store.state.lastPlayedChord.join(" ") }}</p>
 </template>
 
 <script lang="ts">
 import store from "@/store";
-import { getRandomInt } from "@/utils/rnd";
 import {
+    generateChord,
     getNextNote,
     getNotesInKey,
-    getRandomLength,
+    scheduler,
 } from "@/utils/tone/generator";
 import * as Tone from "tone";
 import { defineComponent } from "vue";
 import PlayButton from "../Buttons/PlayButton.vue";
 
 export default defineComponent({
-    name: "MainSynth",
+    name: "MainPiano",
     components: { PlayButton },
     mounted() {
         Tone.Transport.stop();
@@ -38,54 +38,20 @@ export default defineComponent({
             onload() {
                 store.state.samplesReady = true;
                 Tone.Transport.cancel();
-                Tone.Transport.scheduleRepeat((time) => {
-                    const randomNote = getNextNote();
-                    const randomLength = getRandomLength();
-                    const randomVelocity = getRandomInt(10, 100) / 100;
-                    console.log(randomNote, randomLength, randomVelocity);
-
-                    sampler.triggerAttackRelease(
-                        randomNote,
-                        randomLength,
-                        time,
-                        randomVelocity
-                    );
-
-                    const shortNote =
-                        randomLength === "8n" ||
-                        randomLength === "16n" ||
-                        randomLength === "32n";
-
-                    if (shortNote && Math.random() > 0.25) {
-                        console.log("Bonus 2nd note!");
-                        const randomLength2 = getRandomLength();
-                        const nextTime =
-                            time + Tone.Time(randomLength).toSeconds();
-
-                        sampler.triggerAttackRelease(
-                            getNextNote(),
-                            randomLength2,
-                            nextTime,
-                            getRandomInt(10, 100) / 100
-                        );
-
-                        if (Math.random() > 0.5) {
-                            console.log("Bonus 3rd note!!");
-                            sampler.triggerAttackRelease(
-                                getNextNote(),
-                                getRandomLength(),
-                                nextTime + Tone.Time(randomLength2).toSeconds(),
-                                getRandomInt(10, 100) / 100
-                            );
-                        }
-                    }
-                }, "1n");
+                scheduler(sampler, getNextNote);
+                scheduler(sampler, generateChord);
             },
             onerror(err) {
                 console.error("Failed to load samples - ", err);
             },
         }).toDestination();
-        store.state.notesInKeyMode = getNotesInKey("C", "dorian");
+        const reverb = new Tone.Reverb({
+            wet: 1,
+            decay: 10,
+            preDelay: 13 / 1000,
+        }).toDestination();
+        sampler.connect(reverb);
+        store.state.notesInKeyMode = getNotesInKey("C", "ionian");
         this.sampler = sampler;
     },
     data() {

@@ -1,8 +1,8 @@
 <template>
-    <span class="play-button" @click="toggleIcon">
-        <template v-if="playing">⏸</template>
-        <template v-else>▶</template></span
-    >
+    <button class="play-button" @click="toggleIcon">
+        <span class="stop-icon" v-if="playing">■</span>
+        <span class="play-icon" v-else>▷</span>
+    </button>
 </template>
 
 <script lang="ts">
@@ -26,24 +26,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .play-button {
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     background: salmon;
     color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    font-family: Avenir, sans-serif;
-    border: 2px solid salmon;
+    border: none;
     border-radius: 4px;
-    transition: 200ms;
-    padding: 1rem 1.75rem 1rem 2rem;
-
-    &:hover {
-        background: transparent;
-        color: salmon;
-    }
-
-    &:active {
-        transform: scale(0.95);
-    }
+    font-size: 2rem;
+    padding: 0.25rem 1rem;
 }
 </style>
