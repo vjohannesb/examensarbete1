@@ -3,18 +3,12 @@
         <PlayButton @click="togglePlaying" />
     </template>
     <span v-else>Loading samples...</span>
-    <p>{{ $store.state.lastPlayedNote }}</p>
-    <p>{{ $store.state.lastPlayedChord.join(" ") }}</p>
 </template>
 
 <script lang="ts">
 import store from "@/store";
-import {
-    generateChord,
-    getNextNote,
-    getNotesInKey,
-    scheduler,
-} from "@/utils/tone/generator";
+import { getNotesInKey } from "@/utils/generator";
+import { scheduleNotes, scheduleChords } from "@/utils/scheduling";
 import * as Tone from "tone";
 import { defineComponent } from "vue";
 import PlayButton from "../Buttons/PlayButton.vue";
@@ -24,6 +18,10 @@ export default defineComponent({
     components: { PlayButton },
     mounted() {
         Tone.Transport.stop();
+        Tone.Transport.bpm.value = 100;
+        const volume = new Tone.Volume(-12).toDestination();
+        this.$store.commit("SET_VOLUME", volume);
+
         const sampler = new Tone.Sampler({
             urls: {
                 A1: "/samples/A1.mp3",
@@ -38,28 +36,31 @@ export default defineComponent({
             onload() {
                 store.state.samplesReady = true;
                 Tone.Transport.cancel();
-                scheduler(sampler, getNextNote);
-                scheduler(sampler, generateChord);
+                scheduleNotes(sampler);
+                scheduleChords(sampler);
             },
             onerror(err) {
                 console.error("Failed to load samples - ", err);
             },
-        }).toDestination();
+        }).connect(volume);
         const reverb = new Tone.Reverb({
             wet: 1,
             decay: 10,
             preDelay: 13 / 1000,
-        }).toDestination();
+        }).connect(volume);
         sampler.connect(reverb);
-        store.state.notesInKeyMode = getNotesInKey("C", "ionian");
-        this.sampler = sampler;
+
+        store.state.notesInKeyMode = getNotesInKey(
+            store.state.key,
+            store.state.mode
+        );
     },
     data() {
         return {
             playing: false,
-            sampler: new Tone.Sampler(),
         };
     },
+    // ...
     methods: {
         togglePlaying() {
             if (this.playing) Tone.Transport.pause();
