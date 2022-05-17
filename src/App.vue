@@ -1,10 +1,5 @@
 <template>
-    <!-- <nav id="mainNav">
-        <router-link to="/">Home</router-link>
-        <router-link to="/about">About</router-link>
-    </nav> -->
     <main>
-        <!-- <router-view /> -->
         <Home />
     </main>
 </template>

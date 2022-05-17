@@ -48,12 +48,6 @@ export default defineComponent({
     margin-top: 1rem;
     overflow: hidden;
 
-    &.loading {
-        .piano-octave .white-key,
-        .piano-octave .black-key {
-        }
-    }
-
     .piano-octave {
         display: flex;
 
